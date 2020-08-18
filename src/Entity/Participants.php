@@ -6,11 +6,23 @@ use App\Repository\ParticipantsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantsRepository::class)
+ * @UniqueEntity(
+ *     fields = {"pseudo"},
+ *     message = "Ce pseudo est déjà utilisé!"
+ * )
+ * @UniqueEntity(
+ *     fields= {"mail"},
+ *     message= "Cet email es déjà utilisé!",
+ * )
  */
-class Participants
+class Participants implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -40,6 +52,7 @@ class Participants
     private $telephone;
 
     /**
+     * @Assert\Email()
      * @ORM\Column(type="string", length=255)
      */
     private $mail;
@@ -217,5 +230,49 @@ class Participants
         }
 
         return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->pseudo,
+            $this->mail,
+            $this->motdepasse,
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list($this->id,
+            $this->pseudo,
+            $this->mail,
+            $this->motdepasse) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+
+    public function getPassword()
+    {
+        return $this->motdepasse;
+    }
+
+    public function getUsername()
+    {
+        return $this->motdepasse;
     }
 }

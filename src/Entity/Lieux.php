@@ -53,6 +53,7 @@ class Lieux
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
+
     }
 
 

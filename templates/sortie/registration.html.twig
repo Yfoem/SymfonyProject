@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main>
+        <div >
+
+            <h1>Inscription sur le site</h1>
+            <div  class="connexion">
+                {{ form_start(form) }}
+            </div>
+            <div  class="connexion">
+                {{ form_row(form.pseudo, {'label': 'Nom d\'utilisateur','attr': {'placeholder': 'Pseudo'}}) }}
+            </div>
+            <div  class="connexion">
+                {{ form_row(form.nom, {'label': 'Nom','attr': {'placeholder': 'nom'}}) }}
+            </div>
+            <div  class="connexion">
+                {{ form_row(form.prenom, {'label': 'Prénom','attr': {'placeholder': 'prenom'}}) }}
+            </div>
+            <div  class="connexion">
+                {{ form_row(form.telephone, {'label': 'Téléphone','attr': {'placeholder': 'Téléphone'}}) }}
+            </div>
+            <div  class="connexion">
+                {{ form_row(form.mail, {'label': 'Adresse email','attr': {'placeholder': 'exemple@gmail.com'}}) }}
+            </div>
+            <div  class="connexion">
+                {{ form_row(form.motdepasse, {'label': 'Mot de passe','attr': {'placeholder': 'Mot de passe'}}) }}
+            </div>
+            <select name="campus" class="form-control" >
+
+                <option value="">--Choississez votre campus--</option>
+                {% for campus in lieux %}
+                    <option value="{{ lieu.getId() }}">{{ lieu.getNomLieu() }}</option>
+                {% endfor %}
+            </select>
+            <div  class="connexion">
+                <button type="submit"  class="btn btn-primary">Inscription</button>
+            </div>
+            {{ form_end(form) }}
+
+        </div>
+
+    </main>
+{% endblock %}

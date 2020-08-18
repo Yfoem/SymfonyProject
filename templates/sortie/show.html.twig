@@ -1,32 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <article>
-        <h2>Titre de la sortie</h2>
-        <div class="metadata">Posté le 10/05/2020 à 19h00</div>
-        <div class="content">
-            <img src="http://placehold.it/350x100"  alt="">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.</p>
+    <main>
+        <section class="sortie">
+
+            {% for sorties in sorties %}
+                <article >
+                    <div class="form-group row col-md-4 col-form-label
+                                                        text-md-right">
+                        <h2 >{{ sorties.nom }}</h2>
+                    </div>
+
+                    <div>
+                        Ecrit le {{ sorties.datedebut | date('d/m/Y')}} à {{ sorties.datecloture | date('H:i')}}
+                        {{ sorties.descriptioninfos | raw }}
+                        <button > <a href=" {{ path('sortie_show', {'id': sorties.id}) }}" class="btn btn-primary">Lire la suite</a></button>
+                    </div>
+                    <div class="form-group row">
+                        <img src="{{ sorties.urlphoto }}" alt="">
 
 
-        </div>
-    </article>
+                    </div>
 
+                    <hr>
+
+
+                </article>
+
+            {% endfor %}
+
+        </section>
+    </main>
 {% endblock %}
