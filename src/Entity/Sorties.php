@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ORM\Entity(repositoryClass=SortiesRepository::class)
  */
@@ -41,6 +42,7 @@ class Sorties
 
     /**
      * @ORM\Column(type="integer")
+
      */
     private $nbinscriptionsmax;
 
@@ -49,10 +51,7 @@ class Sorties
      */
     private $descriptioninfos;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $etatsortie;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -85,6 +84,8 @@ class Sorties
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();
+        $this->creation = new \DateTime("now");
+        $this->valid = (new \DateTime("now"))->modify('+1 day');
     }
 
     public function getId(): ?int
@@ -164,17 +165,6 @@ class Sorties
         return $this;
     }
 
-    public function getEtatsortie(): ?int
-    {
-        return $this->etatsortie;
-    }
-
-    public function setEtatsortie(?int $etatsortie): self
-    {
-        $this->etatsortie = $etatsortie;
-
-        return $this;
-    }
 
     public function getUrlPhoto(): ?string
     {

@@ -1,36 +1,141 @@
 {% extends 'base.html.twig' %}
 
-
-
 {% block body %}
-    <main>
-    <div >
+    <main >
+        <div class="container">
+            <div class="row justify-content-center" style="margin: 0;">
+                <div class="col-md-8">
+                    <div class="card">
 
-        <h1>Création d'une sortie</h1>
+                        <div class="card-body">
+                            <form action="{{ path('sortie_create') }}" method="post">
 
-        {{ form_start(formSortie) }}
+                                {% if error != "" %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>Erreur !</strong> {{ error }}
+                                    </div>
+                                {% endif %}
+                                {% if success is defined and success %}
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>Succès !</strong> {{ success }}
+                                    </div>
+                                {% endif %}
 
-        {{ form_row(formSortie.nom, {'attr': {'placeholder': "Titre de la sortie"}}) }}
-        {{ form_row(formSortie.datedebut, {'label':'Date de début','attr': {'placeholder': "date de début"}}) }}
-        {{ form_row(formSortie.duree, {'label':'Durée','attr': {'placeholder': "durée"}}) }}
-        {{ form_row(formSortie.datecloture, {'label':'Date de cloture','attr': {'placeholder': "date cloture"}}) }}
-        {{ form_row(formSortie.nbinscriptionsmax, {'label':'Inscription maximum','attr': {'placeholder': "Insription maximum"}}) }}
-        {{ form_row(formSortie.descriptioninfos, {'label':'Description','attr': {'placeholder': "Description"}}) }}
-        {{ form_row(formSortie.etatsortie, {'attr': {'placeholder': "Image de l'article"}}) }}
-        {{ form_row(formSortie.urlPhoto, {'attr': {'placeholder': "Url photo"}}) }}
-        {{ form_row(formSortie.organisateur, {'attr': {'placeholder': "Organisateur"}}) }}
+
+                                <h3 style="text-align: center">Informations de Sortie</h3>
+                                <hr>
+                                <div class="form-group row">
+                                    <label for="inputEmail" class="col-md-4 col-form-label
+                                    text-md-right">Nom</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="inputEmail" class="form-control" name="nom" required
+                                               autofocus
+                                               placeholder="Nom"
+                                               value="{{ last_nom }}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="inputEmail" class="col-md-4 col-form-label
+                                    text-md-right">Date début sortie</label>
+                                    <div class="col-md-6">
+                                        <input type="datetime-local" id="inputDatedebut" class="form-control" name="datedebut" required
+                                               autofocus
+                                               placeholder="Date début de sortie"
+                                               value="{{ last_datedebut }}">
+                                    </div>
+                                </div>
+
+                                    <div class="form-group row">
+                                        <label for="inputEmail" class="col-md-4 col-form-label
+                                    text-md-right">Durée de la sortie</label>
+                                        <div class="col-md-6">
+                                            <input type="number" id="inputDuree" class="form-control" name="duree" required
+                                                   autofocus
+                                                   placeholder="Durée de la sortie"
+                                                   value="{{ last_duree }}">
+                                        </div>
+                                    </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail" class="col-md-4 col-form-label
+                                                    text-md-right">Date de cloture</label>
+                                            <div class="col-md-6">
+                                                <input type="datetime-local" id="inputDatecloture" class="form-control" name="datecloture" required
+                                                       autofocus
+                                                       placeholder="Date fin de sortie"
+                                                       value="{{ last_datecloture }}">
+                                            </div>
+                                        </div>
+                                            <div class="form-group row">
+                                                <label for="inputEmail" class="col-md-4 col-form-label
+                                                        text-md-right">Inscription Max</label>
+                                                <div class="col-md-6">
+                                                    <input type="number" id="inputNbinscription" class="form-control" name="nbinscriptionmax" required
+                                                           autofocus
+                                                           placeholder="Nombre d'inscription possible"
+                                                           value="{{ last_nbinscriptionsmax }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                    <label for="inputEmail" class="col-md-4 col-form-label
+                                                        text-md-right">Description</label>
+                                                    <div class="col-md-6">
+                                                        <input type="text" id="inputDescription" class="form-control" name="descriptioninfos"
+                                                                   autofocus
+                                                                   placeholder="Description"
+                                                                   value="{{ last_descriptioninfos }}">
+                                                    </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                    <label for="inputEmail" class="col-md-4 col-form-label
+                                                        text-md-right">Url photo</label>
+                                                    <div class="col-md-6">
+                                                        <input type="text" id="inputUrlphoto" class="form-control" name="urlphoto"
+                                                                       autofocus
+                                                                       placeholder="Url de la photo"
+                                                                       value="{{ last_urlPhoto }}">
+                                                    </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="inputLieux" class="col-md-4 col-form-label
+                                                        text-md-right">Lieux</label>
+                                                <div class="col-md-6">
+                                                <select name="lieux_id" class="form-control" >
+
+                                                    <option value="">--Choississez le lieu--</option>
+                                                    {% for lieu in lieux %}
+                                                    <option value="{{ lieu.getId() }}">{{ lieu.getNomLieu() }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                </div>
 
 
+                                            </div>
+
+                                            <div class="col-md-6 offset-md-5">
+                                                <button type="submit" name="submit" value="signUp" class="btn btn-primary">
+                                                        S'inscrire
+                                                </button>
+                                            </div>
 
 
-        <button type="submit" class="btn btn-primary">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+        </div>
 
-
-                Ajouter l'article
-
-        </button>
-
-        {{ form_end(formSortie) }}
-    </div>
     </main>
+
 {% endblock %}

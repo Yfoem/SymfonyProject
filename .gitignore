@@ -40,3 +40,4 @@ phpunit.xml.dist
 symfony.lock
 .idea
 bin
+/templates/security/index.html.twig

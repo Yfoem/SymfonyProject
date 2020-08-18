@@ -49,14 +49,14 @@ class SecurityController extends AbstractController
                     $user->setPrenom('');
                     $user->setActif(true);
                     $user->setRoles(['ROLE_USER']);
-                    $success ="Le compte a bien Ã©tÃ© crÃ©Ã©";
+                    $success ="Le compte a bien été créé";
                     $em->persist($user);
                     $em->flush();
                 }else {
-                    $error = "le pseudo est dÃ©jÃ  utilisÃ©.";
+                    $error = "le pseudo est déjà utilisé.";
                 }
             }else {
-                $error = "L'adresse mail est dÃ©jÃ  utilisÃ©e.";
+                $error = "L'adresse mail est déjà utilisée.";
             }
 
 
