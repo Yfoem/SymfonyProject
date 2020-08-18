@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <main>
+    <div >
+
+        <h1>Création d'une sortie</h1>
+
+        {{ form_start(formSortie) }}
+
+        {{ form_row(formSortie.nom, {'attr': {'placeholder': "Titre de la sortie"}}) }}
+        {{ form_row(formSortie.datedebut, {'label':'Date de début','attr': {'placeholder': "date de début"}}) }}
+        {{ form_row(formSortie.duree, {'label':'Durée','attr': {'placeholder': "durée"}}) }}
+        {{ form_row(formSortie.datecloture, {'label':'Date de cloture','attr': {'placeholder': "date cloture"}}) }}
+        {{ form_row(formSortie.nbinscriptionsmax, {'label':'Inscription maximum','attr': {'placeholder': "Insription maximum"}}) }}
+        {{ form_row(formSortie.descriptioninfos, {'label':'Description','attr': {'placeholder': "Description"}}) }}
+        {{ form_row(formSortie.etatsortie, {'attr': {'placeholder': "Image de l'article"}}) }}
+        {{ form_row(formSortie.urlPhoto, {'attr': {'placeholder': "Url photo"}}) }}
+        {{ form_row(formSortie.organisateur, {'attr': {'placeholder': "Organisateur"}}) }}
+
+
+
+
+        <button type="submit" class="btn btn-primary">
+
+
+                Ajouter l'article
+
+        </button>
+
+        {{ form_end(formSortie) }}
+    </div>
+    </main>
+{% endblock %}

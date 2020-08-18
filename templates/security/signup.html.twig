@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('security_login') }}" class="logo">
+        Connexion
+    </a>
+    {% if error is defined and error != ""%}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Erreur !</strong> {{ error }}
+        </div>
+    {% endif %}
+    {% if success is defined and success != ""%}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Succès !</strong> {{ success }}
+        </div>
+    {% endif %}
+    {{ form_start(registerForm) }}
+    {{ form_widget(registerForm) }}
+    <button class="btn btn-primary" type="submit">S'enregistrer</button>
+    {{ form_end(registerForm) }}
+{% endblock %}
+
+{% block title %} Enregistrement {% endblock %}
