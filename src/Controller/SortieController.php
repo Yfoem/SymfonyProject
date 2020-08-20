@@ -11,13 +11,16 @@ use App\Entity\Participants;
 use App\Entity\Sorties;
 
 
-
+use App\Entity\Villes;
 use App\Form\InscritptionType;
 
 
 use App\Form\SortieType;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Array_;
+use phpDocumentor\Reflection\Types\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,12 +35,20 @@ class SortieController extends AbstractController
      */
     public function index()
     {
-        $repo = $this->getDoctrine()->getRepository(Sorties::class);
+        $post = array_map('strip_tags', $_POST);
+        if($post!=null && is_numeric($post['ville']) && $post['ville']!= 0){
 
-        $sorties = $repo->findAll();
+            $villeToFilter = $this->getDoctrine()->getRepository(Villes::class)->find($post['ville']);
+            $lieux =  $this->getDoctrine()->getRepository(Lieux::class)->findBy(['villes_no_ville'=> $villeToFilter]);
+            $sorties=$this->getDoctrine()->getRepository(Sorties::class)->findBy(['lieux_id'=>$lieux]);
+
+        }else {
+            $sorties = $this->getDoctrine()->getRepository(Sorties::class)->findAll();
+        }
+        $villes=  $this->getDoctrine()->getRepository(Villes::class)->findAll();
         return $this->render('sortie/index.html.twig', [
             'controller_name' => 'SortieController',
-            'sorties' => $sorties
+            'sorties' => $sorties,'villes'=>$villes,
         ]);
     }
 
@@ -53,16 +64,6 @@ class SortieController extends AbstractController
     }
 
 
-
-
-    /**
-     * @Route("/login", name="security_login")
-     */
-    public function login()
-    {
-
-        return $this->render('sortie/login.html.twig');
-    }
 
     /**
      * @Route ("/sortie/new", name="sortie_create")
@@ -247,6 +248,37 @@ class SortieController extends AbstractController
         return $this->render('sortie/create.html.twig', $callback);
     }
 
+    /**
+     * @Route ("/sortie/{id}", name="sortie_show")
+     */
+    public function show(Sorties $sorties)
+    {
+        $inscriptions = $this->getDoctrine()->getRepository(Inscription::class)->findBy(["sorties_no_sortie" => $sorties]);
+        $isClotured = $sorties->getDatecloture() <= DateTime::createFromFormat('Y-m-d', date('now'));
+        $isOrga = $sorties->getOrganisateur() == $this->getUser()->getId();
+        $estInscrit = false;
+        foreach ($inscriptions as $inscription) {
+            if ($inscription->getParticipantsNoParticipant()->getId() == $this->getUser()->getId()) {
+                $estInscrit = true;
+            }
+        }
+        return $this->render('sortie/show.html.twig', [
+            'sorties' => $sorties,'isOrga'=>$isOrga,'isClotured'=>$isClotured,'isInscribed'=>$estInscrit,'inscriptions'=>$inscriptions
+        ]);
+    }
+
+    /**
+     * @Route ("/showProfile/{id}", name="profile_show")
+     * @param Participants $user
+     * @return Response
+     */
+    public function showProfile(Participants $user)
+    {
+        $sortiesOrga = $this->getDoctrine()->getRepository(Sorties::class)->findBy(['organisateur'=>$user->getId()]);
+        return $this->render('sortie/profile.html.twig', [
+            'user' => $user, 'sortiesOrga' => $sortiesOrga,
+        ]);
+    }
 
 }
 

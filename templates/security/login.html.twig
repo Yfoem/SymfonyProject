@@ -4,6 +4,9 @@
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
+    <div>
+        <a href="{{ path('app_signup') }}" class="logo">Inscription </a>
+    </div>
    <form method="post">
        <label for="email">Email :</label>
        <input type="email" name="_email" id="email">
@@ -12,6 +15,12 @@
        <input type="password" name="_password" id="password">
 
        <button class="btn btn-primary" type="submit">Se connecter</button>
+
+       <div class="checkbox">
+           <label>
+               <input type="checkbox" name="_remember_me"> Se souvenir de moi
+           </label>
+       </div>
 
    </form>
 

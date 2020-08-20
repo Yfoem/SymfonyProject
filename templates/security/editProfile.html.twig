@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('app_login') }}" class="logo">
-        Connexion
-    </a>
     {% if error is defined and error != ""%}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -20,10 +17,24 @@
             <strong>Succès !</strong> {{ success }}
         </div>
     {% endif %}
-    {{ form_start(registerForm) }}
-    {{ form_widget(registerForm) }}
+
+    <div>
+        <p></p>
+        <p></p>
+        <a href="{{ path('app_editPassword') }}" class="logo">
+
+            <p><span style="font-weight: bold;color: blue;text-decoration: underline; "> Modifier mot de passe</span></p>
+            <p></p>
+        </a>
+    </div>
+    <div>
+    </div>
+    {{ form_start(editProfilFormType) }}
+    {{ form_widget(editProfilFormType) }}
     <button class="btn btn-primary" type="submit">S'enregistrer</button>
-    {{ form_end(registerForm) }}
+    {{ form_end(editProfilFormType) }}
+
+
 {% endblock %}
 
-{% block title %} Enregistrement {% endblock %}
+{% block title %} Profile {% endblock %}

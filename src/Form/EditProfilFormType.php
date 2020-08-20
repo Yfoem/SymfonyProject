@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use APP\Entity\Participants;
+use App\Entity\Participants;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -13,29 +13,24 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RegisterType extends AbstractType
+class EditProfilFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
-            ->add('pseudo')
+            ->add('pseudo' )
             ->add('email', EmailType::class)
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
-                'required' => true,
-                'first_options'  => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Répéter mot de passe'],
-            ])
+            ->add('prenom')
+            ->add('nom')
+            ->add('telephone')
             ->add('campus', EntityType::class,[
                 'class'=> Campus::class,
                 'query_builder' => function (EntityRepository $er){
-                return $er->createQueryBuilder('c')
-                    ->orderBy('c.nom_campus', 'ASC');
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.nom_campus', 'ASC');
                 },
                 'choice_label' =>'campus.nom_campus',
-                ])
+            ])
         ;
     }
 

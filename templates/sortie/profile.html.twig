@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>
+      <h2>{{ user.pseudo }}</h2>
+    </div>
+    <div>
+        {{ user.nom | upper}}  {{ user.prenom | capitalize }}
+
+    </div>
+
+    <div class="mt-2">
+       email : <u><a href="">{{ user.email }}</a></u>
+    </div>
+    <hr>
+
+    <div class="mt-5">
+        Téléphone : {{ user.telephone }}
+    </div>
+    <div>
+       Campus :  {{ user.campus.nomCampus }}
+    </div>
+    <hr>
+
+    <div class="mt-5">
+        {% if sortiesOrga %}
+            Organisateur de :
+            {% for sortie in sortiesOrga %}
+                - <a href="">{{ sortie.nom }}</a>
+            {% endfor %}
+        {% else %}
+           <i> Pas de sortie organisée</i>
+        {% endif %}
+    </div>
+
+
+
+{% endblock %}

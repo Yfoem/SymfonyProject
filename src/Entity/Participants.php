@@ -148,8 +148,9 @@ class Participants implements UserInterface
 
     public function setPassword(string $motdepasse): self
     {
-        $this->motdepasse = $motdepasse;
-
+        if(!is_null($motdepasse)) {
+            $this->motdepasse = $motdepasse;
+        }
         return $this;
     }
 
@@ -231,5 +232,21 @@ class Participants implements UserInterface
     public function getUsername()
     {
         return $this->email;
+    }
+
+    public function transfortUserToParticipant(?UserInterface $user)
+    {
+        $this->id = $user->getId();
+        $this->pseudo = $user->getPseudo();
+        $this->nom = $user->getNom();
+        $this->prenom = $user->getPrenom();
+        $this->telephone= $user->getTelephone();
+        $this->email = $user->getEmail();
+        $this->motdepasse = $user->getPassword();
+        $this->role = $user->getRoles();
+        $this->actif = $user->getActif();
+        $this->campus = $user->getCampus();
+        $this->inscriptions = $user->getInscriptions();
+
     }
 }

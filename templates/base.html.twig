@@ -18,21 +18,33 @@
                 <li class = "nav-item active">
                     <a class="nav-link" href="/sortie"> <font style = "vertical-align: inherit;"> <font style = "vertical-align: inherit;"> Sortie prévu</font> </font> <span class = "sr-only"> <font style = "vertical-align: inherit;"> <font style = "vertical-align: inherit;"> (actuel) </font> </font> </ span > </a>
                 </li>
+                {% if app.user %}
                 <li class = "nav-item">
                     <a class="nav-link" href="{{ path('sortie_create') }}"> <font style = "vertical-align: inherit;"> <font style = "vertical-align: inherit;"> Créer une sortie </font> </font> </a>
                 </li>
-
+                {% endif %}
             </ul>
 
         </div>
-        <div>
-            <a href="{{ path('app_login') }}" class="logo">
-                Connexion
-            </a>
-        </div>
-        <div>
-            <a href="{{ path('app_signup') }}" class="logo">Inscription </a>
-        </div>
+
+        {% if app.user %}
+            <div>
+                Bienvenue
+                <a href="{{ path('app_editProfil') }}" class="logo" style="color:blue">
+                    {{ app.user.pseudo}}
+                </a>
+
+                <a href="{{ path('app_logout') }}" class="logo">Déconnexion</a>
+            </div>
+        {% else %}
+            <div>
+                <a href="{{ path('app_login') }}" class="logo">
+                    Connexion
+                </a>
+            </div>
+        {% endif %}
+
+
     </nav>
 
     </header>

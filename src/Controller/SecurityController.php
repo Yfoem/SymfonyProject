@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Participants;
+use App\Form\EditPasswordType;
+use App\Form\EditProfilFormType;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -49,6 +52,7 @@ class SecurityController extends AbstractController
                     $user->setPrenom('');
                     $user->setActif(true);
                     $user->setRoles(['ROLE_USER']);
+                    $user->setTelephone('');
                     $success ="Le compte a bien été créé";
                     $em->persist($user);
                     $em->flush();
@@ -87,5 +91,74 @@ class SecurityController extends AbstractController
     public function forgot()
     {
 
+    }
+
+
+    /**
+     * @Route("/editProfil", name="app_editProfil")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $encoder
+     * @return Response
+     */
+    public function editProfile(Request $request,EntityManagerInterface $em,UserPasswordEncoderInterface $encoder)
+    {
+        $error= $success ="";
+        $user = new Participants();
+        $user->transfortUserToParticipant($this->getUser());
+        $registerForm= $this->createForm(EditProfilFormType::class,$user);
+
+        $registerForm->handleRequest($request);
+        if($registerForm->isSubmitted() && $registerForm->isValid()) {
+            $user->setTelephone(preg_replace('/\s+/', '', $user->getTelephone()));
+
+            if ($user->getTelephone() != "" && (strlen($user->getTelephone()) != 10 || !is_numeric($user->getTelephone()))) {
+                $error = "numéro de téléphone invalide";
+            } else {
+                $success = "Le compte a bien été modifié";
+                $em->persist($user);
+                $em->flush();
+            }
+
+        }
+
+
+        return $this->render('security/editProfile.html.twig', ["editProfilFormType"=>$registerForm->CreateView(),"error"=>$error,"success"=>$success]);
+    }
+
+    /**
+     * @Route("/editPassword", name="app_editPassword")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $encoder
+     * @return Response
+     */
+    public function editPassword(Request $request,EntityManagerInterface $em,UserPasswordEncoderInterface $encoder)
+    {
+        $error = $success = "";
+        $user = new Participants();
+        $user->transfortUserToParticipant($this->getUser());
+        $registerForm = $this->createForm(EditPasswordType::class, $user);
+
+        $registerForm->handleRequest($request);
+        if($registerForm->isSubmitted() && $registerForm->isValid()) {
+            $hashed = $encoder->encodePassword($user, $user->getPassword());
+            if ($hashed != $this->getUser()->getPassword()) {
+
+                $user->setPassword($hashed);
+                $success = "Le mot de passe a bien été modifié";
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+        return $this->render('security/editPassword.html.twig', ["editPasswordType"=>$registerForm->CreateView(),"error"=>$error,"success"=>$success]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     */
+    public function logout()
+    {
+        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 }
