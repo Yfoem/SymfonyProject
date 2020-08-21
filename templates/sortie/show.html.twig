@@ -2,9 +2,9 @@
 
 {% block body %}
     <main>
-        <section class="sortie">
+        <section class="sorties">
 
-            {% for sorties in sorties %}
+
                 <article >
                     <div class="form-group row col-md-4 col-form-label
                                                         text-md-right">
@@ -12,22 +12,38 @@
                     </div>
 
                     <div>
-                        Ecrit le {{ sorties.datedebut | date('d/m/Y')}} à {{ sorties.datecloture | date('H:i')}}
-                        {{ sorties.descriptioninfos | raw }}
-                        <button > <a href=" {{ path('sortie_show', {'id': sorties.id}) }}" class="btn btn-primary">Lire la suite</a></button>
+                        <p>Début le {{ sorties.datedebut | date('d/m/Y')}} </p>
+                        <p>fin des inscriptions le {{ sorties.datecloture | date('H:i')}}</p>
+                        <p> {{ sorties.descriptioninfos | raw }}</p>
+
                     </div>
                     <div class="form-group row">
                         <img src="{{ sorties.urlphoto }}" alt="">
 
 
                     </div>
-
+                    Liste des inscrits :
+                    {%  for inscription in inscriptions  %}
+                        <p>
+                        <a>{{ inscription.participantsNoParticipant.pseudo }} </a>
+                        </p>
+                    {%  endfor %}
                     <hr>
+                    {% if app.user %}
+                        {% if isOrga %}
+                           <button class="btn btn-secondary"> <a href="{{ path('supprimer_sortie', {'id': sorties.id}) }}">Suppression </a></button>
+                        {% elseif isClotured%}
+                            Les inscriptions sont terminées
+                           {% elseif isInscribed %}
+                               <button class="btn btn-secondary"> <a href="{{ path('desinscription_show', {'id': sorties.id}) }}">Désinscription </a></button>
 
+                           {% else %}
+                               <button class="btn btn-secondary"><a href="{{ path('sinscrire_show', {'id': sorties.id}) }}">Inscription </a></button>
 
+                        {% endif %}
+                    {% endif %}
                 </article>
 
-            {% endfor %}
 
         </section>
     </main>

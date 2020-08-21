@@ -76,7 +76,7 @@ class Sorties
     private $etats_id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Inscription::class, mappedBy="sorties_no_sortie")
+     * @ORM\oneToMany(targetEntity=Inscription::class, mappedBy="sorties_no_sortie")
      * @ORM\JoinColumn(nullable=false)
      */
     private $inscriptions;
@@ -207,7 +207,7 @@ class Sorties
         return $this->etats_id;
     }
 
-    public function setEtatsId(?Etats $etats_id): self
+    public function setEtatsId(?Etats $etats_id)
     {
         $this->etats_id = $etats_id;
 

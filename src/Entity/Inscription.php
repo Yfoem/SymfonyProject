@@ -25,7 +25,7 @@ class Inscription
     private $date_inscription;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Sorties::class, inversedBy="inscriptions")
+     * @ORM\ManyToOne(targetEntity=Sorties::class, inversedBy="inscriptions")
      */
     private $sorties_no_sortie;
 
@@ -35,10 +35,6 @@ class Inscription
      */
     private $participants_no_participant;
 
-    public function __construct()
-    {
-        $this->sorties_no_sortie = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -57,31 +53,19 @@ class Inscription
         return $this;
     }
 
-    /**
-     * @return Collection|Sorties[]
-     */
-    public function getSortiesNoSortie(): Collection
+
+    public function getSortiesNoSortie()
     {
         return $this->sorties_no_sortie;
     }
 
-    public function addSortiesNoSortie(Sorties $sortiesNoSortie): self
+    public function addSortiesNoSortie(Sorties $sortiesNoSortie)
     {
-        if (!$this->sorties_no_sortie->contains($sortiesNoSortie)) {
-            $this->sorties_no_sortie[] = $sortiesNoSortie;
-        }
 
-        return $this;
+            $this->sorties_no_sortie= $sortiesNoSortie;
+
     }
 
-    public function removeSortiesNoSortie(Sorties $sortiesNoSortie): self
-    {
-        if ($this->sorties_no_sortie->contains($sortiesNoSortie)) {
-            $this->sorties_no_sortie->removeElement($sortiesNoSortie);
-        }
-
-        return $this;
-    }
 
     public function getParticipantsNoParticipant(): ?Participants
     {
